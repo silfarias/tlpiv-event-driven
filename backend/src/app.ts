@@ -1,5 +1,5 @@
 import { envs } from './config/envs';
-import { connect } from './database/dbConnect';
+import { DbConnect } from './database/dbConnect';
 import { routes } from './routes/index.routes';
 import { Server } from './server';
 
@@ -9,6 +9,9 @@ import { Server } from './server';
         port: envs.port,
         routes: routes
     });
-    await connect();
+    const db = new DbConnect({ 
+        mongoUrl: envs.MONGO_URL
+    });
+    await db.connect();
     server.listen();
 })();
