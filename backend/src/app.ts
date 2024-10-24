@@ -1,8 +1,7 @@
 import { envs } from './config/envs';
 import { DbConnect } from './database/dbConnect';
 import { routes } from './routes/index.routes';
-import { Server } from './server';
-
+import { Server } from './server'
 
 (async () => {
     const server = new Server({

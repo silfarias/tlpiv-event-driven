@@ -6,7 +6,7 @@ interface JwtPayload {
     nombre: string;
 }
 
-export const validarJwt = (req: Request, res: Response, next: NextFunction) => {
+export const validarJwt = (req: Request, res: Response, next: NextFunction): any => {
 
     const token = req.header('x-token');
 
