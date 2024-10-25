@@ -1,9 +1,10 @@
 import { Router } from "express";
-// import { publicarCurso } from "../controllers/pruebaCurso";
 import { validarJwt } from "../jwt/validarJwt";
+import { CursoController } from "../controllers/curso.controller";
 
 const cursoRouter = Router();
+const cursoCtrl = new CursoController();
 
-cursoRouter.get('/', validarJwt);
+cursoRouter.post('/', validarJwt, cursoCtrl.publicarCurso);
 
 export { cursoRouter }

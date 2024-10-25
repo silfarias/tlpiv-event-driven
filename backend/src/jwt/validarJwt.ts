@@ -6,6 +6,16 @@ interface JwtPayload {
     nombre: string;
 }
 
+// extiende el objeto Request de Express para agregar uid y nombre
+declare global {
+    namespace Express {
+        interface Request {
+            uid?: string;
+            nombre?: string;
+        }
+    }
+}
+
 export const validarJwt = (req: Request, res: Response, next: NextFunction): any => {
 
     const token = req.header('x-token');
