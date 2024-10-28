@@ -90,7 +90,6 @@ export const useAuthStore = () => {
       errorMessage,
 
       startLogin,
-      startRegister,
       startLogout,
       checkAuthToken
     }

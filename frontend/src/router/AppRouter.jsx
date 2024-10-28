@@ -6,7 +6,7 @@ import { useAuthStore } from '../hooks/useAuthStore.js';
 
 export const AppRouter = () => {
   
-  //const authStatus = 'not-authenticated'; // Cambia este valor para probar
+  const authStatus = 'not-authenticated'; // not-authenticated - authenticated - checking
 
   const { checkAuthToken, status } = useAuthStore();
 
@@ -22,7 +22,7 @@ export const AppRouter = () => {
   
   return (
     <Routes>
-      { status === 'not-authenticated' ? (
+      { authStatus === 'not-authenticated' ? (
         <>
           <Route path="/auth" element={<Login />}/>
           <Route path="/*" element={<Navigate to="/auth" />} />
