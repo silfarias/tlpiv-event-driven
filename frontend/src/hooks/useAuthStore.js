@@ -3,6 +3,7 @@ import codeAcademyApi from '../api/codeAcademyApi.js';
 import { onChecking, onLogin, onLogout, clearErrorMessage } from '../store/auth/authSlice.js';
 
 
+
 export const useAuthStore = () => {
 
   const { status, user, errorMessage } = useSelector( state => state.auth );
