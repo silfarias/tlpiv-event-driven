@@ -1,13 +1,14 @@
 import amqp, { Channel, Connection } from 'amqplib';
+import { envs } from '../config/envs';
 
-const RABBITMQ_URL = 'amqp://localhost'; 
+const rabbitMqUrl = envs.RABBITMQ_URL; 
 
 let connection: Connection;
 let channel: Channel;
 
 export async function connectRabbitMQ() {
     try {
-        connection = await amqp.connect(RABBITMQ_URL);
+        connection = await amqp.connect(rabbitMqUrl);
         channel = await connection.createChannel();
         console.log('Conectado a RabbitMQ');
     } catch (error) {

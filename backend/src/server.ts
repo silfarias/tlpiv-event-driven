@@ -29,7 +29,7 @@ export class Server implements IServer {
         this.app.post('/send', async (req: Request, res: Response) => {
             const { message } = req.body;
             try {
-                await sendToQueue('mi_cola_rabbit', message);
+                await sendToQueue('cola-rabbit', message);
                 res.status(200).send('Mensaje enviado a RabbitMQ');
             } catch (error) {
                 console.error('Error al enviar mensaje:', error);
@@ -47,7 +47,7 @@ export class Server implements IServer {
 
     public async connectRabbitMQ() {
         await connectRabbitMQ();
-        consumeFromQueue('mi_cola_rabbit', (msg: string) => {
+        consumeFromQueue('cola-rabbit', (msg: string) => {
             console.log(`Mensaje recibido: ${msg}`);
         });
     }
