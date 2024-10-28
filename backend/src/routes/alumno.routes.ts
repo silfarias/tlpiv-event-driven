@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { registrarAlumno } from "../controllers/alumno.controller";
+import { AlumnoController } from "../controllers/alumno.controller";
 
 const alumnoRouter = Router();
+const ctrlAlumno = new AlumnoController();
 
-alumnoRouter.post('/', registrarAlumno);
+alumnoRouter.post('/', ctrlAlumno.registrarAlumno);
 
 export { alumnoRouter };
