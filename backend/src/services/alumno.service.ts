@@ -12,7 +12,7 @@ export interface IAlumno {
 export class AlumnoService {
     public async registrarAlumno(data: IAlumno) {
         try {
-            const alumnoExiste = await Alumno.findById({ email: data.email });
+            const alumnoExiste = await Alumno.findOne({ email: data.email });
             if (alumnoExiste) {
                 return {
                     ok: false,
@@ -26,6 +26,16 @@ export class AlumnoService {
             await newAlumno.save();
             const token = await generateJWT(newAlumno.id, newAlumno.nombre);
             return { newAlumno, token };
+        } catch (error) {
+            console.log(error);
+            throw error
+        }
+    }
+
+    public async obtenerAlumnos() {
+        try {
+            const alumnos = await Alumno.find();
+            return alumnos
         } catch (error) {
             console.log(error);
             throw error

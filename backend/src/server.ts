@@ -1,5 +1,5 @@
 import express, { Application, Router, Request, Response } from 'express';
-import { connectRabbitMQ, sendToQueue, consumeFromQueue } from './mq/rabbitmq';
+import { connectRabbitMQ, sendToQueue, consumeFromQueue } from './services/rabbitmq.service';
 import cors from 'cors';
 import morgan from 'morgan';
 

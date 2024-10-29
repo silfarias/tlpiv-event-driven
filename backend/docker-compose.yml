@@ -17,7 +17,8 @@ services:
       - "27017:27017"
     env_file:
       - .env
-      
+    volumes:
+      - mongo_data:/data/db
 
   nodejs-app:
     build:
@@ -31,3 +32,6 @@ services:
       - mongo
     ports:
       - "8000:8000"
+
+volumes:
+  mongo_data:

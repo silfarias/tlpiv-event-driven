@@ -8,7 +8,7 @@ import { eventRouter } from './evento.routes';
 const routes = Router();
 
 routes.use('/auth', authRouter);
-routes.use('/profe', profesorRouter);
+routes.use('/profesor', profesorRouter);
 routes.use('/alumno', alumnoRouter);
 routes.use('/curso', cursoRouter);
 routes.use('/evento', eventRouter);
