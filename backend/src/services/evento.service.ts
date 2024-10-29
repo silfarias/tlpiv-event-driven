@@ -20,7 +20,7 @@ export class EventoService {
             const newEvento = new Evento(data);
             await newEvento.save();
 
-            this.emitirEventoCreacion(newEvento);
+            // this.emitirEventoCreacion(newEvento);
 
             return newEvento
         } catch (error) {
@@ -29,7 +29,7 @@ export class EventoService {
         }
     }
 
-    private emitirEventoCreacion(evento: any) {
-        console.log(`Evento creado: ${evento.titulo}`);
+    private async notificarAlumnos(alumnos: string[], evento: IEvento) {
+        
     }
 };
