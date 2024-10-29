@@ -1,0 +1,36 @@
+services:
+  rabbitmq:
+    image: rabbitmq:4.0.2
+    container_name: some-rabbit
+    hostname: my-rabbit
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    env_file:
+      - .env
+
+  mongo:  
+    image: mongo:5.0
+    container_name: mongocontainer
+    ports:
+      - "27017:27017"
+    env_file:
+      - .env
+    volumes:
+      - mongo_data:/data/db
+
+  nodejs-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nodejs-container
+    env_file:
+      - .env
+    depends_on:
+      - rabbitmq
+      - mongo
+    ports:
+      - "8000:8000"
+
+volumes:
+  mongo_data:

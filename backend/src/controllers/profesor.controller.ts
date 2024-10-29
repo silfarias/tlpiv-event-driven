@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { Profesor } from '../models/profesor';
 import bcrypt from 'bcryptjs';
 import { generateJWT } from '../jwt/jwt';
+import { ProfesorService } from '../services/profesor.service';
 
 export const registrarProfesor = async (req: Request, res: Response): Promise<any> => {
     const { nombre, apellido, email, password } = req.body;
@@ -39,4 +40,26 @@ export const registrarProfesor = async (req: Request, res: Response): Promise<an
             error
         });
     }
+};
+
+export class ProfesorController {
+    private profesorService: ProfesorService;
+
+    constructor() {
+        this.profesorService = new ProfesorService();
+        this.obtenerProfesores = this.obtenerProfesores.bind(this);
+    };
+
+    public async obtenerProfesores(req: Request, res: Response): Promise<any> {
+        try {
+            const profesores = await this.profesorService.obtenerProfesores();
+            return res.status(200).json(profesores);
+        } catch (error) {
+            return res.status(500).json({
+                ok: false,
+                message: 'Error al obtener los profesores',
+                error
+            })
+        }
+    };
 };

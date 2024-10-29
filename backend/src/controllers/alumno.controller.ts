@@ -1,43 +1,59 @@
-import { Request, Response } from 'express';
-import { Alumno } from '../models/alumno';
-import { generateJWT } from '../jwt/jwt';
-import bcrypt from 'bcryptjs';
+import { Request, Response } from "express";
+import { AlumnoService, IAlumno } from "../services/alumno.service";
 
+export class AlumnoController {
+    private alumnoService: AlumnoService;
 
-export const registrarAlumno = async (req: Request, res: Response): Promise<any> => {
-    const { nombre, apellido, email, password } = req.body;
-    try {
-        let alumno = await Alumno.findOne({ email });
-        if (alumno) {
-            return res.status(400).json({
+    constructor() {
+        this.alumnoService = new AlumnoService();
+        this.registrarAlumno = this.registrarAlumno.bind(this);
+        this.obtenerAlumnos = this.obtenerAlumnos.bind(this);
+    }
+
+    public async registrarAlumno(req: Request, res: Response): Promise<any> {
+        const { nombre, apellido, email, password } = req.body as IAlumno;
+
+        try {
+            const { newAlumno, token } = await this.alumnoService.registrarAlumno({ nombre, apellido, email, password });
+
+            return res.status(201).json({
+                ok: true,
+                message: 'Alumno registrado exitosamente',
+                alumno: newAlumno,
+                token
+            });
+
+        } catch (error: any) {
+            if (error.message === 'El email ya existe') {
+                return res.status(400).json({
+                    ok: false,
+                    message: 'El email ya existe',
+                    error: error.message
+                });
+            }
+            return res.status(500).json({
                 ok: false,
-                message: 'El email ya existe',
-                error: 'El email ya existe'
+                message: 'Error al registrar el alumno',
+                error: error.message
             });
         }
-        alumno = new Alumno(req.body);
+    }
 
-        const salt = bcrypt.genSaltSync();
-        alumno.password = bcrypt.hashSync(password, salt);
-
-        await alumno.save();
-
-        const token = await generateJWT(alumno.id, alumno.nombre);
-
-        return res.status(201).json({
-            ok: true,
-            uid: alumno._id,
-            nombre: alumno.nombre,
-            apellido: alumno.apellido,
-            email: alumno.email,
-            password: alumno.password,
-            token: token
-        });
-    } catch (error) {
-        return res.status(500).json({
-            ok: false,
-            message: 'Error al crear el Alumno',
-            error
-        });
+    public async obtenerAlumnos(req: Request, res: Response): Promise<any> {
+        try {
+            const alumnos = await this.alumnoService.obtenerAlumnos();
+            return res.status(200).json({
+                ok: true,
+                message: 'Alumnos obtenidos exitosamente',
+                alumnos
+            });
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({
+                ok: false,
+                message: 'Error al obtener alumnos',
+                error
+            });
+        }
     }
 };

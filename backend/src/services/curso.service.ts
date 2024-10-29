@@ -1,26 +1,18 @@
+import { Alumno } from "../models/alumno";
 import { Curso } from "../models/curso";
-import { Profesor } from "../models/profesor";
+import { Types } from "mongoose";
 
-interface ICurso {
+export interface ICurso {
     nombre: string
     descripcion: string
-    profesores?: string[]
 }
 
 export class CursoService {
     public async publicarCurso(data: ICurso, profesorId: string) {
         try {
-
-            // const profesores = data.profesores ? [...data.profesores, profesorId] : [profesorId];
-
-            // const profesoresValidos = await Profesor.find({ '_id': { $in: profesores } });
-            // if (profesoresValidos.length !== profesores.length) {
-            //     throw new Error('Uno o más profesores no existen en la base de datos');
-            // }
-
             const curso = new Curso({
                 ...data, 
-                profesores: [profesorId]
+                profesor: profesorId
             });
             await curso.save();
             console.log(curso)
@@ -30,4 +22,41 @@ export class CursoService {
             throw error
         }
     }
-}
+
+    public async listarCursos() {
+        try {
+            const cursos = await Curso.find().populate('profesor').populate('alumnos');
+            return cursos
+        } catch (error) {
+            console.log(error)
+            throw error
+        }
+    }
+
+    public async obtenerCursosPorProfe(profesorId: string) {
+        try {
+            const cursos = await Curso.find({ profesor: profesorId }).populate('alumnos');
+            return cursos;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+
+    public async inscribirAlumno(id: string, alumnoId: string) {
+        try {
+            const curso = await Curso.findById(id);
+            if (!curso) {
+                throw new Error('Curso no encontrado');
+            }
+            if (!curso.alumnos.includes(new Types.ObjectId(alumnoId))) {
+                curso.alumnos.push(new Types.ObjectId(alumnoId));
+                await curso.save();
+            }
+            return curso;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+};
