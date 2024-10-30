@@ -3,7 +3,12 @@ import './css/Header.css'
 import avatar from '../assets/avatar.jpg';
 import { ImExit } from "react-icons/im";
 
+import {useAuthStore} from '../hooks/useAuthStore.js';
+
 export const Header = () => {
+
+  const {user, startLogout} = useAuthStore();
+
   return (
     <div id='box-header-main'>
       <div id='box-header-main-center'>
@@ -40,8 +45,8 @@ export const Header = () => {
 
         <div id='box-header-perfil'>
           <div id='box-header-perfil-text'>
-            <h3>Usuario 1</h3>
-            <p><ImExit /></p>
+            <h3>{user.name}</h3>
+            <p onClick={startLogout}><ImExit /></p>
           </div>
           <div id='box-header-perfil-img'>
             <img src={avatar} alt="avatar" />
