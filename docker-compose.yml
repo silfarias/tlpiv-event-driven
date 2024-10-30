@@ -44,7 +44,12 @@ services:
       dockerfile: Dockerfile
     container_name: frontend-container
     ports:
-      - "5174:5174" 
+      - "3000:3000" 
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
     networks:
       - app-network
 
