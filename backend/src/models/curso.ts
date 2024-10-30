@@ -9,11 +9,17 @@ const CursoSchema = new Schema({
         type: String,
         required: true
     },
-    profesores: [{
+    profesor: {
         type: Schema.Types.ObjectId,
         ref: 'Profesor',
         required: true
-    }]
+    },
+    alumnos: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Alumno'
+        }
+    ]
 }, {
     timestamps: true,
     versionKey: false
