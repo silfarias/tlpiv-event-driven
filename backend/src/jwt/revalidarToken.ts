@@ -6,12 +6,8 @@ export const revalidarToken = async (req: Request, res: Response) => {
 
     const uid = req.uid as string;
     const name = req.nombre as string;
-
-    console.log('uid: ', uid);
-    console.log('name: ', name);
-
+    
     const token = await generateJWT(uid, name)
-    console.log('token: ', token);
 
     res.json(
         {

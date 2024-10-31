@@ -1,7 +1,8 @@
-import express, { Application, Router, Request, Response } from 'express';
-import { connectRabbitMQ, sendToQueue, consumeFromQueue } from './services/rabbitmq.service';
+import express, { Application, Router } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
+
+import {connectRabbitMQ, receiveMessages} from './services/rabbitmq.service';
 
 interface IServer {
     listen(): void;
@@ -26,16 +27,6 @@ export class Server implements IServer {
 
     private router(): void {
         this.app.use('/', this.routes);
-        this.app.post('/send', async (req: Request, res: Response) => {
-            const { message } = req.body;
-            try {
-                await sendToQueue('cola-rabbit', message);
-                res.status(200).send('Mensaje enviado a RabbitMQ');
-            } catch (error) {
-                console.error('Error al enviar mensaje:', error);
-                res.status(500).send('Error al enviar mensaje');
-            }
-        });
     }
 
     private middlewares(): void {
@@ -44,13 +35,9 @@ export class Server implements IServer {
         this.app.use(cors());
         this.app.use(morgan('dev'));
     }
-
     public async connectRabbitMQ() {
         await connectRabbitMQ();
-        /*
-        consumeFromQueue('cola-rabbit', (msg: string) => {
-            console.log(`Mensaje recibido: ${msg}`);
-        });*/
+        await receiveMessages();
     }
 
     public listen(): void {
