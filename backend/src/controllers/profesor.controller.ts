@@ -55,8 +55,8 @@ export class ProfesorController {
             res.status(201).json({
                 ok: true,
                 message: 'Profesor registrado exitosamente',
-                alumno: newProfesor,
-                token
+                profesor: newProfesor,
+                token: token
             })
         } catch (error: unknown) {
             res.status(500).json({
