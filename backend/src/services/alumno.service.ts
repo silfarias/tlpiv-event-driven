@@ -1,6 +1,6 @@
 import { generateJWT } from "../jwt/jwt";
 import { Alumno } from "../models/alumno";
-import bcrypt from 'bcryptjs';
+import { hashPassword } from "../utils/hash";
 
 export interface IAlumno {
     nombre: string;
@@ -20,13 +20,13 @@ export class AlumnoService {
                     error: 'El email ya existe'
                 }
             }
-            data.password = bcrypt.hashSync(data.password, 10);
-
+            const hashedPassword = await hashPassword(data.password);
+            data.password = hashedPassword;
             const newAlumno = new Alumno(data);
             await newAlumno.save();
             const token = await generateJWT(newAlumno.id, newAlumno.nombre);
             return { newAlumno, token };
-        } catch (error) {
+        } catch (error: unknown) {
             console.log(error);
             throw error
         }
@@ -36,7 +36,7 @@ export class AlumnoService {
         try {
             const alumnos = await Alumno.find();
             return alumnos
-        } catch (error) {
+        } catch (error: unknown) {
             console.log(error);
             throw error
         }

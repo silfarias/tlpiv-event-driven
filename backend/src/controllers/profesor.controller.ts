@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { Profesor } from '../models/profesor';
 import bcrypt from 'bcryptjs';
 import { generateJWT } from '../jwt/jwt';
-import { ProfesorService } from '../services/profesor.service';
+import { IProfesor, ProfesorService } from '../services/profesor.service';
 
 export const registrarProfesor = async (req: Request, res: Response): Promise<any> => {
     const { nombre, apellido, email, password } = req.body;
@@ -42,20 +42,37 @@ export const registrarProfesor = async (req: Request, res: Response): Promise<an
     }
 };
 
-export class ProfesorController {
-    private profesorService: ProfesorService;
+const profesorService = new ProfesorService();
 
-    constructor() {
-        this.profesorService = new ProfesorService();
-        this.obtenerProfesores = this.obtenerProfesores.bind(this);
+export class ProfesorController {
+
+    public async registrarProfesor(req: Request, res: Response) {
+        const { nombre, apellido, email, password } = req.body as IProfesor;
+
+        try {
+            const { newProfesor, token } = await profesorService.registrarProfesor({ nombre, apellido, email, password });
+
+            res.status(201).json({
+                ok: true,
+                message: 'Profesor registrado exitosamente',
+                alumno: newProfesor,
+                token
+            })
+        } catch (error: unknown) {
+            res.status(500).json({
+                ok: false,
+                message: 'Error al registrar el profesor',
+                error: error
+            });
+        }
     };
 
-    public async obtenerProfesores(req: Request, res: Response): Promise<any> {
+    public async obtenerProfesores(req: Request, res: Response) {
         try {
-            const profesores = await this.profesorService.obtenerProfesores();
-            return res.status(200).json(profesores);
+            const profesores = await profesorService.obtenerProfesores();
+            res.status(200).json(profesores);
         } catch (error) {
-            return res.status(500).json({
+            res.status(500).json({
                 ok: false,
                 message: 'Error al obtener los profesores',
                 error

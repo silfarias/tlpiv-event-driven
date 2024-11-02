@@ -17,7 +17,7 @@ export class CursoService {
             await curso.save();
             console.log(curso)
             return curso
-        } catch (error) {
+        } catch (error: unknown) {
             console.log(error)
             throw error
         }
@@ -27,7 +27,7 @@ export class CursoService {
         try {
             const cursos = await Curso.find().populate('profesor').populate('alumnos');
             return cursos
-        } catch (error) {
+        } catch (error: unknown) {
             console.log(error)
             throw error
         }
@@ -37,7 +37,7 @@ export class CursoService {
         try {
             const cursos = await Curso.find({ profesor: profesorId }).populate('alumnos');
             return cursos;
-        } catch (error) {
+        } catch (error: unknown) {
             console.log(error);
             throw error;
         }
@@ -54,7 +54,7 @@ export class CursoService {
                 await curso.save();
             }
             return curso;
-        } catch (error) {
+        } catch (error: unknown) {
             console.log(error);
             throw error;
         }

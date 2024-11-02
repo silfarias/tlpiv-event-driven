@@ -19,17 +19,10 @@ export class EventoService {
             }
             const newEvento = new Evento(data);
             await newEvento.save();
-
-            // this.emitirEventoCreacion(newEvento);
-
             return newEvento
-        } catch (error) {
+        } catch (error: unknown) {
             console.log(error);
             throw error
         }
-    }
-
-    private async notificarAlumnos(alumnos: string[], evento: IEvento) {
-        
     }
 };

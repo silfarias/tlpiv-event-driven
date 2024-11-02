@@ -7,6 +7,6 @@ const profesorRouter = Router();
 const ctrlProfesor = new ProfesorController();
 
 profesorRouter.get('/', validarJwt, ctrlProfesor.obtenerProfesores);
-profesorRouter.post('/', validateRegister, registrarProfesor);
+profesorRouter.post('/', validateRegister, ctrlProfesor.registrarProfesor);
 
 export { profesorRouter };
